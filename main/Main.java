@@ -15,17 +15,20 @@ import main.objects.MapData;
 public class Main extends JPanel{
 	public static final JFrame frame = new JFrame("LD33");
 	public static final Main panel = new Main();
+	public static final InputHandler keyHandler = new InputHandler();
 	
 	public static void main(String...args){
 		frame.setSize(800, 608);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		frame.setResizable(true);
+		frame.setResizable(false);
 		frame.add(panel);
-		Engine.test();
+		frame.addKeyListener(keyHandler);
 		Timer timer = new Timer("Update Timer", true);
 		timer.scheduleAtFixedRate(new UpdateTask(), 500, 33);
+		Engine.init();
+		Engine.test();
 	}
 	
 	@Override

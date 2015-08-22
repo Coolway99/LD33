@@ -22,7 +22,7 @@ public class MapData{
 
 	private final int width, height;
 	private final TileSheet tileSheet;
-	private final String script;
+	private final Script script;
 	private final ByteData map;
 
 	public MapData(InputStream map){
@@ -32,7 +32,7 @@ public class MapData{
 			this.height = Integer.parseInt(temp[1].trim());
 			this.tileSheet = new TileSheet(ImageIO.read(ResourceHelper.getResource("tilemaps/"+in.readLine())),
 					Engine.TileSize);
-			this.script = in.readLine();
+			this.script = new Script(in.readLine());
 			this.map = new ByteData(this.width, this.height, in);
 		} catch(IOException e){
 			throw new RuntimeException(e);
@@ -61,6 +61,10 @@ public class MapData{
 				}
 			}
 		}
+	}
+	
+	public void update(int playerX, int playerY){
+		this.script.checkPoint(playerX, playerY);
 	}
 	
 	public BufferedImage getTile(int x, int y){
@@ -95,7 +99,7 @@ public class MapData{
 					String[] line = in.readLine().split(",");
 					for(int x = 0; x < line.length; x++){
 						int temp = Integer.parseInt(line[x].trim(), 16);
-						this.flags[y][x] = temp > 0; //true if can move, false if wall
+						this.flags[y][x] = temp >= 0; //true if can move, false if wall
 						this.bytes[y][x] = (byte) Math.abs(temp);
 					}
 				}
