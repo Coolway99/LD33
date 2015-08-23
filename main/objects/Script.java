@@ -12,6 +12,7 @@ import main.Main;
 import main.ResourceHelper;
 
 public class Script{
+	private static final HashMap<String, String> varList = new HashMap<>();
 	private final HashMap<Point, String> tileList;
 	private final boolean hasList;
 
@@ -70,10 +71,27 @@ public class Script{
 			}
 			case "dialog":
 			case "displayText":
-				Engine.drawSpeechbubble(args.replaceAll("\\!\\.\\!", "\n"));
+				Engine.drawSpeechbubble(args);
 				break;
 			case "repaint":
 				Main.frame.repaint();
+				break;
+			case "setFacing":
+				switch(args.toLowerCase()){
+					case "up":
+						Main.keyHandler.direction = Direction.Up;
+						break;
+					case "right":
+						Main.keyHandler.direction = Direction.Right;
+						break;
+					case "down":
+						Main.keyHandler.direction = Direction.Down;
+						break;
+					case "left":
+						Main.keyHandler.direction = Direction.Left;
+						break;
+					default:
+				}
 				break;
 			case "addEvent":{
 				String[] temp = args.split("\"");
@@ -86,7 +104,15 @@ public class Script{
 				String[] temp = args.split("\\*\\,\\:");
 				script.tileList.remove(new Point(Integer.parseInt(temp[0].trim()),
 						Integer.parseInt(temp[1].trim())));
+				break;
 			}
+			case "setVar":{
+				String[] temp = args.split("\\*\\,\\:");
+				varList.put(temp[0], temp[1]);
+				break;
+			}
+			case "clearVar":
+				varList.remove(args);
 				break;
 			default:
 		}

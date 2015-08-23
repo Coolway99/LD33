@@ -1,0 +1,2 @@
+@17,3;loadMap:StartRoom.map*,:3*,:1
+@1,0;loadMap:OutsideA.map*,:4*,:3:,*setFacing:down

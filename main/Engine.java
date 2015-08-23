@@ -54,7 +54,8 @@ public class Engine{
 		}
 	}
 
-	public static BufferedImage render(Graphics2D g){
+	@SuppressWarnings("hiding")
+	public static BufferedImage render(){
 		if(hasText){
 			Graphics2D g2 = last.createGraphics();
 			g2.setFont(new Font(Font.MONOSPACED, Font.BOLD, 40));
@@ -62,20 +63,26 @@ public class Engine{
 			g2.fillRoundRect(0, 305, 780, 250, 40, 40);
 			g2.setColor(Color.BLACK);
 			g2.drawRoundRect(5, 310, 770, 240, 40, 40);
-			g2.drawString(speechText, 20, 345);
+			String[] temp = speechText.split("!.!");
+			for(int x = 0; x < temp.length; x++){
+				g2.drawString(temp[x], 20, 345+40*x);
+			}
+			g2.fillPolygon(new int[]{740, 755, 770}, new int[]{530, 545, 530}, 3);
 			while(!keys.enter){return last;
 			}
 			hasText = false;
 			keys.enter = false;
 		}
-		BufferedImage screen = new BufferedImage(MapData.MaxWidthTiles*TileSize,
-				MapData.MaxHeightTiles*TileSize, BufferedImage.TYPE_INT_RGB);
+		BufferedImage screen = new BufferedImage(Main.frame.getWidth(), Main.frame.getHeight(),
+				BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2 = screen.createGraphics();
+		//g2.scale(2, 2);
 		map.render(x, y, g2);
 		//g2.setColor(Color.RED);
 		//g2.fillOval(400-8, 304-8, 16, 16);
-		g2.drawImage(playerSprite.getTile(Direction.getNum(keys.direction), 0), 400-16, 304-16, null);
-		map.postRender(x, y, g2);
+		g2.drawImage(playerSprite.getTile(Direction.getNum(keys.direction), 0), 
+				(Main.frame.getWidth()/2)-16, (Main.frame.getHeight()/2)-16, null);
+		//map.postRender(x, y, g2);
 		if(keys.keyDown){
 			keys.keyDown = false;
 			int newX = x;

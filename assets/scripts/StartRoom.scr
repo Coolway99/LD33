@@ -1,3 +1,3 @@
-@0,1;dialog:Patient shows signs of short term amnesia,!.!however has recovered enough to resume work.:,*setPos:1*,:1
-@0,2;dialog:Patient shows signs of short term amnesia,!.!however has recovered enough to resume work.:,*setPos:1*,:2
-@0,3;loadMap:TestMap.map*,:1*,:1
+@1,0;dialog:Patient shows signs of short!.!term amnesia, however has!.!recovered enough to resume work:,*setPos:1*,:1*,:true
+@2,0;dialog:Patient shows signs of short!.!term amnesia, however has!.!recovered enough to resume work:,*setPos:2*,:1*,:false
+@3,0;loadMap:hospital/Hallway1.map*,:17*,:2
