@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 
 import main.Engine;
+import main.Main;
 import main.ResourceHelper;
 
 public class Script{
@@ -18,6 +19,7 @@ public class Script{
 		this(ResourceHelper.getResourceAsStream("scripts/"+path));
 	}
 
+	@SuppressWarnings("hiding")
 	public Script(InputStream file){
 		boolean hasList = false;
 		HashMap<Point, String> tileList = new HashMap<>();
@@ -32,7 +34,7 @@ public class Script{
 					tileList.put(point, temp[1]);
 				} else {
 					String[] temp = line.replaceFirst(":", "\u0001").split("\u0001");
-					parse(temp[0], temp[1]);
+					parse(temp[0], temp[1], this);
 				}
 				line = in.readLine();
 			}
@@ -49,15 +51,43 @@ public class Script{
 		}
 	}
 	
-	private static void parse(String command, String args){
+	private static void parse(String command, String args, Script script){
 		switch(command){
 			case "debug":
 				System.out.println(args);
 				break;
-			case "loadMap":
-				Engine.loadMap(args);
+			case "loadMap":{
+				String[] temp = args.split("\\*\\,\\:");
+				Engine.loadMap(temp[0], Integer.parseInt(temp[1].trim()),
+						Integer.parseInt(temp[2].trim()));
 				break;
-			
+			}
+			case "setPos":{
+				String[] temp = args.split("\\*\\,\\:");
+				Engine.setLocation(Integer.parseInt(temp[0].trim()),
+						Integer.parseInt(temp[1].trim()), Boolean.parseBoolean(temp[2].trim()));
+				break;
+			}
+			case "dialog":
+			case "displayText":
+				Engine.drawSpeechbubble(args.replaceAll("\\!\\.\\!", "\n"));
+				break;
+			case "repaint":
+				Main.frame.repaint();
+				break;
+			case "addEvent":{
+				String[] temp = args.split("\"");
+				String[] temp2 = temp[0].split("\\*\\,\\:");
+				script.tileList.put(new Point(Integer.parseInt(temp2[0].trim()),
+						Integer.parseInt(temp2[1].trim())), temp[1]);
+				break;
+			}
+			case "removeEvent":{
+				String[] temp = args.split("\\*\\,\\:");
+				script.tileList.remove(new Point(Integer.parseInt(temp[0].trim()),
+						Integer.parseInt(temp[1].trim())));
+			}
+				break;
 			default:
 		}
 	}
@@ -68,10 +98,13 @@ public class Script{
 	
 	public void checkPoint(Point point){
 		if(!this.hasList){return;}
-		String command = tileList.get(point);
-		if(command != null){
-			String[] temp = command.replaceFirst(":", "\u0001").split("\u0001");
-			parse(temp[0], temp[1]);
+		String string = this.tileList.get(point);
+		if(string != null){
+			String[] commands = string.split("\\:\\,\\*");
+			for(String command : commands){
+				String[] temp = command.replaceFirst(":", "\u0001").split("\u0001");
+				parse(temp[0], temp[1], this);
+			}
 		}
 	}
 }

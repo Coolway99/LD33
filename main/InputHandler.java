@@ -7,8 +7,9 @@ import main.objects.Direction;
 
 public class InputHandler implements KeyListener{
 	
-	public Direction direction;
+	public Direction direction = Direction.Down;
 	public boolean keyDown = false;
+	public boolean enter = false;
 
 	@Override
 	public void keyPressed(KeyEvent e){
@@ -33,6 +34,9 @@ public class InputHandler implements KeyListener{
 				this.keyDown = true;
 				this.direction = Direction.Left;
 				break;
+			case KeyEvent.VK_ENTER:
+				this.enter = true;
+				break;
 			default:
 		}
 	}
@@ -49,6 +53,9 @@ public class InputHandler implements KeyListener{
 			case KeyEvent.VK_LEFT:
 			case KeyEvent.VK_A:
 				this.keyDown = false;
+				break;
+			case KeyEvent.VK_ENTER:
+				this.enter = false;
 				break;
 			default:
 		}

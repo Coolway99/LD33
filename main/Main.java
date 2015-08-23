@@ -22,7 +22,7 @@ public class Main extends JPanel{
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		frame.setResizable(false);
+		frame.setResizable(true);
 		frame.add(panel);
 		frame.addKeyListener(keyHandler);
 		Timer timer = new Timer("Update Timer", true);
@@ -34,7 +34,7 @@ public class Main extends JPanel{
 	@Override
 	public void paintComponent(Graphics g){
 		Graphics2D g2 = (Graphics2D) g;
-		BufferedImage render = Engine.render();
+		BufferedImage render = Engine.render(g2);
 		g2.drawImage(render, (MapData.MaxWidthTiles*-32+800), (MapData.MaxHeightTiles*-32+600), null);
 		super.paintComponents(g);
 	}
